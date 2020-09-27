@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 //사용자가 요청 -> 응답(HTML파일)
@@ -18,8 +19,8 @@ public class HttpControllerTest {
 	
 	//http://localhost:8080/http/get (select)
 	@GetMapping("/http/get")
-	public String getTest() {
-		return "get 요청";
+	public String getTest(@RequestParam int id, @RequestParam String username) {
+		return "get 요청" + id + "," + username;
 	}
 	//http://localhost:8080/http/post (insert)
 	@PostMapping("/http/post")
