@@ -19,10 +19,16 @@ public class HttpControllerTest {
 	private static final String TAG = "HttpControllerTest : ";
 	@GetMapping("/http/lombok")
 	public String lombokTest() {
-		Member m = new Member(1, "ssar", "1234", "email");
-		System.out.println(TAG + "getter : " + m.getId());
-		m.setId(5000);
-		System.out.println(TAG + "setter : " + m.getId());
+//		Member m = new Member(1, "ssar", "1234", "email");
+//		System.out.println(TAG + "getter : " + m.getId());
+//		m.setId(5000);
+//		System.out.println(TAG + "setter : " + m.getId());
+		
+		//순서상관없고 내가 넣고 싶은것만 넣을 수 있다. 그리고 여기서 값을 변경할 수 있다.
+		Member m = Member.builder().username("ssar").password("1234").email("ssar@nate.com").build();
+		System.out.println(TAG + "getter : " + m.getUsername());
+		m.setUsername("cos");
+		System.out.println(TAG + "setter : " + m.getUsername());
 		return "lombok test 완료";
 	}
 	

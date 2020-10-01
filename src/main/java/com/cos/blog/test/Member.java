@@ -1,6 +1,7 @@
 package com.cos.blog.test;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,20 @@ import lombok.RequiredArgsConstructor;
 //@NoArgsConstructor
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Member {
 	private int id;
 	private String username;
 	private String password;
 	private String email;
+	
+	@Builder
+	public Member(int id, String username, String password, String email) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+	}
 	
 	//요즘에 DB에서 가져온 데이터 변경할 일 없을 때 저렇게 final 붙힌다.
 	//	private final int id;
