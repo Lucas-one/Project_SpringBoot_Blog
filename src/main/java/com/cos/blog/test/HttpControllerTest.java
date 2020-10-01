@@ -16,8 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HttpControllerTest {
 	
-	//인터넷 브라우저 요청은 무조건 get요청 밖에 할 수 없다.
+	private static final String TAG = "HttpControllerTest : ";
+	@GetMapping("/http/lombok")
+	public String lombokTest() {
+		Member m = new Member(1, "ssar", "1234", "email");
+		System.out.println(TAG + "getter : " + m.getId());
+		m.setId(5000);
+		System.out.println(TAG + "setter : " + m.getId());
+		return "lombok test 완료";
+	}
 	
+	
+	//인터넷 브라우저 요청은 무조건 get요청 밖에 할 수 없다.
 	//http://localhost:8080/http/get (select)
 	@GetMapping("/http/get")
 	public String getTest(Member m) {//http://localhost:8080/http/get?id=1&username=hi&email=3&password=1234 //MessageConverter (스프링부트)
