@@ -6,15 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-//@Getter
-//@Setter
-
 //모든 알규먼트(변수) 다쓰는 생성자 만들고 싶으면
 //@AllArgsConstructor
 
 //final 붙은애들에대한(걔네만) constructor만들어준다.
 //@RequiredArgsConstructor
 
+//@Getter
+//@Setter
 //두개다 하고 싶을 때는 Data
 //@Data
 
