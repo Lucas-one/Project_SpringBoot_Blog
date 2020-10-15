@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.UserRepository;
 
@@ -24,7 +25,7 @@ public class DummyControllerTest {
 //		System.out.println("username : " + username);
 //		System.out.println("password : " + password);
 //		System.out.println("email : " + email);
-//		return "회원가입이 완료되었습니다.";
+//		return "회원가입이 완료되었습니다.";A
 //	}
 	
 	@Autowired		//의존성 주입(DI)
@@ -41,6 +42,7 @@ public class DummyControllerTest {
 		System.out.println("role : " + user.getRole());
 		System.out.println("createDate : " + user.getCreateDate());
 		
+		user.setRole(RoleType.USER);
 		userRepository.save(user);
 		return "회원가입이 완료되었습니다.";
 	}
