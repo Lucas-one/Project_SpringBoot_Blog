@@ -37,7 +37,7 @@ public class DummyControllerTest {
 		System.out.println("id : " + user.getId());
 		System.out.println("username : " + user.getUsername());
 		System.out.println("username : " + user.getUsername());
-		System.out.println("password : " + user.getPssword());
+		System.out.println("password : " + user.getPassword());
 		System.out.println("email : " + user.getEmail());
 		System.out.println("role : " + user.getRole());
 		System.out.println("createDate : " + user.getCreateDate());

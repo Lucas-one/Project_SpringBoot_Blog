@@ -40,7 +40,7 @@ public class Board {
 	@Lob	//대용량 데이터 쓸 때 사용
 	private String content;	//	섬머노트 라이브러리 쓴다. <html>태그가 섞여서 디자인이 된다.
 	
-	@ColumnDefault("0")	//여기선 홑따옴표 필요없다.
+	@ColumnDefault("0")	//여기선 홑따옴표 필요없다. int니까.. String이었으면 "' '" (홑따옴표도 포함)
 	private int count;	//조회수
 
 	//이게 핵심이다. Database는 Object저장할 수 없어서 FK 사용한다. ORM 사용하면 그대로 Object 사용할 수 있다. 자동적으로 FK 만들어준다.

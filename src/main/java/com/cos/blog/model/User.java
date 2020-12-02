@@ -38,7 +38,7 @@ public class User {
 	private String username;	//id
 	
 	@Column(nullable = false, length = 100)	//123456 => 해쉬 (비밀번호암호화)로 바꿀거다 따라서 넉넉히
-	private String pssword;
+	private String password;
 	
 	@Column(nullable = false, length = 50)
 	private String email;
@@ -46,6 +46,7 @@ public class User {
 	//도메인은 범위를 말한다 예를들어 학년이라면 1~6학년 성별이라면 남 여
 	//Enum은 도메인을 설정할 수 있다.
 	//@ColumnDefault("'user'")	//홑따옴표도 포함하는것에 주목하자 !!
+	//즉 "   'user '   " 이렇게 되어 있다.
 	//DB는 RoleType이라는 게 없다.	따라서 String Type이라는 것을 알려준다.
 	@Enumerated(EnumType.STRING)
 	private RoleType role;		//Enum을 쓰는게 좋다.	//admin, user, manager		//String으로 쓰면 오타나도 받아들여지기 때문에 문제된다. 
