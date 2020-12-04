@@ -42,15 +42,17 @@ public class Board {
 	
 	@ColumnDefault("0")	//여기선 홑따옴표 필요없다. int니까.. String이었으면 "' '" (홑따옴표도 포함)
 	private int count;	//조회수
-
+ 
 	//이게 핵심이다. Database는 Object저장할 수 없어서 FK 사용한다. ORM 사용하면 그대로 Object 사용할 수 있다. 자동적으로 FK 만들어준다.
 	@ManyToOne(fetch = FetchType.EAGER)	//	Many = Board, One = User				//연관관계 		//한명의 유저는 여러개의 게시글을 쓸 수있다. 여러개의 게시글은 한명의 유저에 의해 쓰여질 수 있다.
 	@JoinColumn(name="userId")
-	private User userId;		//DB는 오브젝트를 저장할 수 없다. 따라서 FK 사용. 근데 자바는 오브젝트를 저장할 수 있다.
+	//DB는 오브젝트를 저장할 수 없다. 따라서 FK 사용.
+	//근데 자바는 오브젝트를 저장할 수 있다.
+	private User userId;
 	
 	//mappedBy가 적혀있으면 연관관계 주인이 아니다.(난 FK가 아니에요) DB에 컬럼 만들지 마세요.. 
 	//즉 Reply table의 boardId가 FK다. 난 단지 Board를 select할 때 Reply 값을 가져오기 위해 필요한 것이다.
-	//"board"는 Reply테이블에 있는 board를 보고 적으면 된다.
+	//"board"는 Reply테이블에 있는 board를 보고 적으면 된다.(필드 이름)
 	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER)	
 	private List<Reply> reply;
 	
