@@ -3,6 +3,8 @@ package com.cos.blog.test;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +46,39 @@ public class DummyControllerTest {
 	@Autowired		//의존성 주입(DI)
 	private UserRepository userRepository;
 	
+	//email, password 변경
+	@Transactional//Transactional을하면 더티체킹 !. 이걸 걸면 save하지 않아도 update된다. save설명은 밑에 참고
+	@PutMapping("/dummy/user/{id}")//밑에보면 똑같은 URI로 요청하는게 있는데 그건 Get이고 이건 Put이다. 알아서 잘 구분해서 처리해준다.	
+	public User updateUser(@PathVariable int id, @RequestBody User requestUser) {	//JSON으로 받으려면 @RequestBody 필요
+		System.out.println("id :" + id);
+		System.out.println("pw :" + requestUser.getPassword());
+		System.out.println("email :" + requestUser.getEmail());
+		
+		requestUser.setId(id);
+		requestUser.setUsername("ssar");
+		
+		//save는 원래 insert때 하는거
+		//pw, email, ssar만 넣었기 때문에 다른 값들은 null이된다..(문제 발생) 따라서 save로는 잘 쓰지 않는다.
+		//save(insert)를 쓸려면 해당 user찾아서 변경해줘서 넣어야 한다.
+		
+		//save함수는 id를 전달하지 않으면 insert를 해주고
+		//save함수는 id를 전달하면 해당 id에 대한 데이터가 있으면 update를 해주고
+		//sava함수는 id를 전달하면 해당 id에 대한 데이터가 없으면 insert를 해준다.
+		
+		
+		User user = userRepository.findById(id).orElseThrow(()->{
+			return new IllegalArgumentException("수정에 실패하였습니다.");
+		});
+		
+		user.setPassword(requestUser.getPassword());
+		user.setPassword(requestUser.getEmail());
+		
+		//위처럼 바꿔준 것에
+		//save하면 수정된다. 하지만 Transactional이 있으면 더티체킹으로 수정된다.
+		//userRepository.save(requestUser);
+		
+		return null;
+	}
 	
 	////http://localhost:8000/blog/dummy/user
 	//전체 다받을 것이기 때문에 파라미터가 필요 없다.
@@ -52,6 +89,7 @@ public class DummyControllerTest {
 	
 	//한페이지당 2건에 데이터를 리턴받아 볼 예정
 	//JSP에서는 페이징할 때 복잡하다.
+	//Sort 저부분 order by 하는 것
 	@GetMapping("/dummy/user")
 	public List<User> pageList(@PageableDefault(size=2, sort="id", direction = Sort.Direction.DESC) Pageable pageable){
 		Page<User> pagingUser = userRepository.findAll(pageable);
