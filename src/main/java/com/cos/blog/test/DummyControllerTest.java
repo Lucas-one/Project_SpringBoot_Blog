@@ -6,11 +6,13 @@ import java.util.function.Supplier;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +48,21 @@ public class DummyControllerTest {
 	@Autowired		//의존성 주입(DI)
 	private UserRepository userRepository;
 	
+	@DeleteMapping("/dummy/user/{id}")
+	public String delete(@PathVariable int id) {
+		try {
+			userRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			return "삭제에 실패했습니다. 해당 ID는 DB에 없습니다.";
+		}
+		return "삭제되었습니다. id : " + id;
+	}
+	
+	
 	//email, password 변경
+	//Transactional => 함수 종료시에 자동 commit됨
+	//더티체킹이 나쁜뜻이아니다. 바뀐 찌꺼기들 확인해서 처리하는 것이다.
+	//DB에서의 더티체킹은 바뀔거 모아놨다가 한번에 하는것을 더티체킹이라고 한다. JPA에서는 변경될때마다 바꿔주는것을 더티체킹이라 한다.
 	@Transactional//Transactional을하면 더티체킹 !. 이걸 걸면 save하지 않아도 update된다. save설명은 밑에 참고
 	@PutMapping("/dummy/user/{id}")//밑에보면 똑같은 URI로 요청하는게 있는데 그건 Get이고 이건 Put이다. 알아서 잘 구분해서 처리해준다.	
 	public User updateUser(@PathVariable int id, @RequestBody User requestUser) {	//JSON으로 받으려면 @RequestBody 필요
@@ -71,13 +87,13 @@ public class DummyControllerTest {
 		});
 		
 		user.setPassword(requestUser.getPassword());
-		user.setPassword(requestUser.getEmail());
+		user.setEmail(requestUser.getEmail());
 		
 		//위처럼 바꿔준 것에
 		//save하면 수정된다. 하지만 Transactional이 있으면 더티체킹으로 수정된다.
 		//userRepository.save(requestUser);
 		
-		return null;
+		return user;
 	}
 	
 	////http://localhost:8000/blog/dummy/user
@@ -127,7 +143,7 @@ public class DummyControllerTest {
 //		});
 		
 		////////////
-		//이렇게 하는 걸 선호한다.
+		//이렇게 하는 걸 선호한다. 
 		
 		//람다식 <= 이렇게 하는 게 훨씬 좋다
 //		User user = userRepository.findById(id).orElseThrow(()->{
